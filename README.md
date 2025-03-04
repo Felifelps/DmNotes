@@ -53,11 +53,11 @@ python main.py
 
 **DmNotes** provides an intuitive way to manage key elements of your RPG campaigns:
 
-🔹 **Characters** - Create and manage characters with attributes like name, race, and class.
-🔹 **Events** - Log significant events that shape the storyline.
-🔹 **Items** - Create and track in-game items for distribution, trade, or hidden treasures.
-🔹 **Places** - Maintain a list of important locations within your world.
-🔹 **Sheets** - Store and organize character sheets for quick reference.
+- **Characters** - Create and manage characters with attributes like name, race, and class.
+- **Events** - Log significant events that shape the storyline.
+- **Items** - Create and track in-game items for distribution, trade, or hidden treasures.
+- **Places** - Maintain a list of important locations within your world.
+- **Sheets** - Store and organize character sheets for quick reference.
 
 ## 📌 Requirements
 
