@@ -1,81 +1,69 @@
-# Dmnotes app
+# DmNotes: A Dungeon Master Aid Tool
 
-## Run the app
+## 📖 Description
 
-### uv
+**DmNotes** is a powerful aid tool designed for Dungeon Masters (DMs) of **Dungeons & Dragons (D&D)** and other tabletop RPGs. This application helps DMs **categorize, organize, and quickly access** essential game elements such as **Characters, Places, Events, Items, and Sheets**.
 
-Run as a desktop app:
+With **DmNotes**, Dungeon Masters can efficiently manage their campaign details, ensuring a seamless and immersive storytelling experience.
 
-```
-uv run flet run
-```
+## Repository Structure
 
-Run as a web app:
+The project is structured as follows:
 
-```
-uv run flet run --web
-```
+- **`constants.py`** - Initializes directories for local databases.
+- **`main.py`** - Sets up the application layout, connects views, and initializes the program.
+- **`models.py`** - Defines core data models such as `Character`, `Event`, `Item`, `Place`, and `Sheet`.
+- **`utils.py`** - Contains utility functions used across the project.
+- **`view.py`** - Defines the general structure and behavior of the views.
+- **`character.py`**, `items.py`, `events.py`, `places.py`, `sheets.py` - Define specialized views for their respective data models.
 
-### Poetry
+## 🚀 Installation & Setup
 
-Install dependencies from `pyproject.toml`:
+To get started with **DmNotes**, follow these steps:
 
-```
-poetry install
-```
-
-Run as a desktop app:
-
-```
-poetry run flet run
+### Clone the repository
+```sh
+git clone https://github.com/Felifelps/DmNotes.git
 ```
 
-Run as a web app:
-
-```
-poetry run flet run --web
-```
-
-For more details on running the app, refer to the [Getting Started Guide](https://flet.dev/docs/getting-started/).
-
-## Build the app
-
-### Android
-
-```
-flet build apk -v
+### Navigate to the project directory
+```sh
+cd DmNotes
 ```
 
-For more details on building and signing `.apk` or `.aab`, refer to the [Android Packaging Guide](https://flet.dev/docs/publish/android/).
-
-### iOS
-
-```
-flet build ipa -v
-```
-
-For more details on building and signing `.ipa`, refer to the [iOS Packaging Guide](https://flet.dev/docs/publish/ios/).
-
-### macOS
-
-```
-flet build macos -v
+### (Optional) Create a virtual environment
+It is recommended to create a virtual environment before installing dependencies:
+```sh
+python -m venv venv
+source venv/bin/activate  # macOS/Linux
+venv\Scripts\activate  # Windows
 ```
 
-For more details on building macOS package, refer to the [macOS Packaging Guide](https://flet.dev/docs/publish/macos/).
-
-### Linux
-
-```
-flet build linux -v
+### Install dependencies
+```sh
+pip install -r requirements.txt
 ```
 
-For more details on building Linux package, refer to the [Linux Packaging Guide](https://flet.dev/docs/publish/linux/).
-
-### Windows
-
-```
-flet build windows -v
+### Run the application
+```sh
+python main.py
 ```
 
-For more details on building Windows package, refer to the [Windows Packaging Guide](https://flet.dev/docs/publish/windows/).
+## 🎭 Features & Usage
+
+**DmNotes** provides an intuitive way to manage key elements of your RPG campaigns:
+
+🔹 **Characters** - Create and manage characters with attributes like name, race, and class.
+🔹 **Events** - Log significant events that shape the storyline.
+🔹 **Items** - Create and track in-game items for distribution, trade, or hidden treasures.
+🔹 **Places** - Maintain a list of important locations within your world.
+🔹 **Sheets** - Store and organize character sheets for quick reference.
+
+## 📌 Requirements
+
+- **Python 3.6 or higher**
+- Dependencies listed in `requirements.txt`
+
+## 🤝 Contributing
+
+We welcome contributions! If you want to enhance **DmNotes**, feel free to submit **pull requests**. Bug reports, suggestions, and feature requests are highly appreciated.
