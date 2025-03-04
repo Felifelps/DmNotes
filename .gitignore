@@ -164,5 +164,4 @@ storage/
 
 # Extra
 .vscode
-**.bat
 **.spec
