@@ -1,6 +1,5 @@
+![icon](ico.ico)
 # DmNotes: A Dungeon Master Aid Tool
-
-## 📖 Description
 
 **DmNotes** is a powerful aid tool designed for Dungeon Masters (DMs) of **Dungeons & Dragons (D&D)** and other tabletop RPGs. This application helps DMs **categorize, organize, and quickly access** essential game elements such as **Characters, Places, Events, Items, and Sheets**.
 
@@ -17,7 +16,7 @@ The project is structured as follows:
 - **`view.py`** - Defines the general structure and behavior of the views.
 - **`character.py`**, `items.py`, `events.py`, `places.py`, `sheets.py` - Define specialized views for their respective data models.
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 To get started with **DmNotes**, follow these steps:
 
@@ -49,7 +48,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-## 🎭 Features & Usage
+## Features & Usage
 
 **DmNotes** provides an intuitive way to manage key elements of your RPG campaigns:
 
@@ -59,11 +58,11 @@ python main.py
 - **Places** - Maintain a list of important locations within your world.
 - **Sheets** - Store and organize character sheets for quick reference.
 
-## 📌 Requirements
+## Requirements
 
 - **Python 3.6 or higher**
 - Dependencies listed in `requirements.txt`
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! If you want to enhance **DmNotes**, feel free to submit **pull requests**. Bug reports, suggestions, and feature requests are highly appreciated.
