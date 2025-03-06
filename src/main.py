@@ -10,6 +10,7 @@ def main(page: ft.Page):
     page.title = "DmNotes"
     page.window.alignment = ft.alignment.top_right
     page.window.width = 400
+    page.window.icon = "ico.ico"
     page.scroll = "auto"
 
     page.views.extend([
