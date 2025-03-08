@@ -189,6 +189,7 @@ class ModelView(View):
         self.model_form_dialog.title.value = f"{action} {self.model_help_text}"
 
         self.current_model_id = None
+        self.image_display.visible = False
         if model:
             self.current_model_id = model.id
             data = get_model_fields(model)
@@ -197,7 +198,9 @@ class ModelView(View):
                 self.inputs[field].value = value
 
             if self.image_field:
-                self.image_display.src = getattr(model, self.image_field)
+                image_src = getattr(model, self.image_field)
+                self.image_display.src = image_src
+                self.image_display.visible = bool(image_src)
 
         self._page.open(self.model_form_dialog)
 
