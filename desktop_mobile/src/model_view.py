@@ -95,13 +95,18 @@ class ModelView(View):
         self.inputs = {field_name: ft.TextField(
             label=field.help_text,
             multiline='Text' in str(type(field)),
-            visible=field_name != self.image_field,
         ) for field_name, field in self.fields.items()}
 
         if self.image_field:
             self.image_display = ft.Image(
                 src="",
                 fit=ft.ImageFit.CONTAIN,
+            )
+            self.image_input = self.inputs[self.image_field]
+            self.image_input.on_change = lambda _: setattr(
+                self.image_display,
+                'visible',
+                bool(self.image_input.value)
             )
             upload_button = ft.TextButton(
                 "Selecionar Imagem", on_click=lambda _: self.file_picker.pick_files(allow_multiple=False))
@@ -120,12 +125,9 @@ class ModelView(View):
             else:
                 self.model.create(**values)
 
-            self.clear_inputs()
-
             self.load_models()
-            close_dialog(e)
 
-            self.message("Criação bem sucedida!")
+            self.message("Salvo com sucesso!")
 
         dialog_content = ft.ResponsiveRow(
             width=1000,
@@ -149,7 +151,7 @@ class ModelView(View):
                           weight=ft.FontWeight.BOLD),
             content=dialog_content,
             actions=[
-                ft.TextButton("Cancelar", on_click=close_dialog),
+                ft.TextButton("Sair", on_click=close_dialog),
                 ft.TextButton("Salvar", on_click=save_model),
             ],
             actions_alignment=ft.MainAxisAlignment.END,
@@ -185,11 +187,11 @@ class ModelView(View):
         self._page.open(self.delete_model_dialog)
 
     def open_model_form_dialog(self, model=None):
+        self.clear_inputs()
         action = "Novo" if not model else "Editar"
         self.model_form_dialog.title.value = f"{action} {self.model_help_text}"
 
         self.current_model_id = None
-        self.image_display.visible = False
         if model:
             self.current_model_id = model.id
             data = get_model_fields(model)
@@ -200,7 +202,6 @@ class ModelView(View):
             if self.image_field:
                 image_src = getattr(model, self.image_field)
                 self.image_display.src = image_src
-                self.image_display.visible = bool(image_src)
 
         self._page.open(self.model_form_dialog)
 
@@ -220,7 +221,7 @@ class ModelView(View):
             if not os.path.exists(destination):
                 shutil.copy(file.path, destination)
 
-            self.inputs[self.image_field].value = destination
+            self.image_input.value = destination
             self.selected_image_path = destination
             self.image_display.src = destination
             self._page.update()

@@ -60,6 +60,11 @@ class Sheet(ImageModel):
     description = peewee.TextField(null=True, help_text="Descrição")
 
 
+class Dungeon(ImageModel):
+    title = peewee.CharField(help_text="Título")
+    description = peewee.TextField(null=True, help_text="Descrição")
+
+
 db.connect()
 
-db.create_tables([Character, Place, Event, Item, Sheet], safe=True)
+db.create_tables([Character, Place, Event, Item, Sheet, Dungeon], safe=True)

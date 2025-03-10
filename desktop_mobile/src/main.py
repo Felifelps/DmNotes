@@ -1,5 +1,6 @@
 import flet as ft
 from character import CharactersView
+from dungeons import DungeonsView
 from events import EventsView
 from items import ItemsView
 from places import PlacesView
@@ -18,6 +19,7 @@ def main(page: ft.Page):
         ItemsView(page, route='/items'),
         EventsView(page, route='/events'),
         PlacesView(page, route='/places'),
+        DungeonsView(page, route='/dungeons'),
         CharactersView(page, route='/characters'),
     ])
 
