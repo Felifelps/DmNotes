@@ -49,7 +49,9 @@ class View(ft.View):
             ),
         )
 
-        self.snack_bar = ft.SnackBar(content=ft.Text())
+        self.snack_bar = ft.SnackBar(content=ft.Text(
+            color=ft.Colors.WHITE
+        ))
 
         self.render()
 

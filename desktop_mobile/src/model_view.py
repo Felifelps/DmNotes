@@ -126,6 +126,7 @@ class ModelView(View):
                 self.model.create(**values)
 
             self.load_models()
+            close_dialog(e)
 
             self.message("Salvo com sucesso!")
 
