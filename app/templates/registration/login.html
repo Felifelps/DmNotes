@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
+
+  <strong class="h1 mb-3 d-flex align-items-center" style="font-family: 'Poppins', sans-serif;">
+    <i class="bi bi-journal-bookmark-fill me-2"></i> DmNotes
+  </strong>
+
+  <span class="navbar-brand mt-1 mb-5 h5 text-muted">
+    <i class="bi bi-map-fill me-2"></i>
+    Organize suas campanhas, personagens e aventuras com praticidade.
+  </span>
+
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 400px;">
+    <h4 class="mb-4 text-center"><i class="bi bi-person-circle me-2"></i>Entrar</h4>
+
+    {% if form.errors %}
+    <div class="alert alert-danger mt-4">
+      <ul class="mb-0">
+        {% for field in form %}
+        {% for error in field.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="username" class="form-label">Usuário</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Usuário" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Senha</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Senha" required>
+      </div>
+
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Entrar</button>
+      </div>
+    </form>
+
+    <div class="mt-3 text-center">
+      <span class="text-muted">Não tem uma conta? <a href="{% url 'signup' %}">Cadastre-se</a></span>
+    </div>
+  </div>
+</div>
+{% endblock %}

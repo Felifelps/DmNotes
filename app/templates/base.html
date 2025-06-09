@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" data-bs-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}DmNotes{% endblock %}</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Seu CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  <!-- Adicione no <head> do seu HTML -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,500&family=Poppins:ital,wght@1,500&family=Playfair+Display:ital@1&display=swap"
+    rel="stylesheet">
+
+
+  {% block head %} {% endblock %}
+
+  <style>
+    .card-hover-scale {
+      transition: transform 0.2s ease;
+      text-decoration: none;
+      ;
+    }
+
+    .card-hover-scale:hover {
+      transform: scale(1.03);
+      z-index: 1;
+      /* Garante que o hover fique sobre os outros cards */
+    }
+
+
+    .navbar-brand {
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+
+    footer {
+      font-size: 0.9rem;
+      background-color: #1c1c1c;
+    }
+  </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+  {% if user.is_authenticated %}
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top">
+    <div class="container-xl">
+      <a class="navbar-brand" href="/">DmNotes</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto gap-2">
+
+          {% if user.is_authenticated %}
+
+          <span class="navbar-text text-white me-3">
+            <strong>Bem-vindo, {{ user.username }}! </strong>
+          </span>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'campaign_list' %}">Campanhas</a>
+          </li>
+
+          <form action="{% url 'logout' %}" method="post" id="logout-form" class="nav-item">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link text-decoration-none nav-link">
+              <i class="bi bi-box-arrow-right"></i> Sair
+            </button>
+          </form>
+          {% endif %}
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  {% if campaign %}
+  <!-- Sub-navbar da campanha -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-secondary shadow-sm mt-5">
+    <div class="container-xl pt-2">
+      <a href="{% url 'campaign_detail' campaign.pk %}" class="navbar-brand mb-0 h5">
+        {{ campaign.name }}
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#campaignNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="campaignNavbar">
+        <ul class="navbar-nav ms-auto gap-2">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'character_list' campaign.pk %}">Personagens</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dungeon_list' campaign.pk %}">Masmorras</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'sheet_list' campaign.pk %}">Fichas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'item_list' campaign.pk %}">Itens</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'event_list' campaign.pk %}">Eventos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'place_list' campaign.pk %}">Lugares</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% else %}
+  <div class="mt-5"></div>
+  {% endif %}
+
+  {% endif %}
+
+  <!-- Conteúdo principal -->
+  <main class="container-xl flex-grow-1 py-4">
+    {% block content %}
+    <!-- Conteúdo da página -->
+    {% endblock %}
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="text-white text-center py-3 mt-auto">
+    &copy; {{ now|default:2025 }} <strong>Felipe Santos</strong>. Todos os direitos reservados.
+  </footer>
+
+  <!-- Modal para imagem -->
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header border-0">
+          <h5 class="modal-title" id="imageModalLabel"></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img id="modalImage" src="" alt="" class="img-fluid rounded">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% block scripts %} {% endblock %}
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function openImageModal(url, name) {
+      const modalImg = document.getElementById('modalImage');
+      const modalTitle = document.getElementById('imageModalLabel');
+      modalImg.src = url;
+      modalImg.alt = name;
+      modalTitle.textContent = name;
+    }
+
+    function filterElements() {
+      const searchInput = document.getElementById('searchInput');
+      const search = searchInput.value.toLowerCase();
+
+      const elements_list = document.querySelectorAll('#elements a');
+
+      let visible = elements_list.length;
+
+      elements_list.forEach(element => {
+        if (element.id.toLowerCase().includes(search)) {
+          element.style.display = 'block';
+        } else {
+          element.style.display = 'none';
+          visible--;
+        }
+      })
+
+      const elements = document.getElementById('elements');
+      const not_found = "<p>Nenhum resultado encontrado.</p>";
+
+      if (!visible) {
+        elements.innerHTML += not_found;
+      } else {
+        elements.innerHTML = elements.innerHTML.replace(not_found, "");
+      }
+
+    }
+
+    // Evento para fixar o objeto ao clicar no botão
+    function toggleFixed(event, destroy = false) {
+      const toggleBtn = event.currentTarget;
+
+      event.preventDefault();
+
+      fetch(toggleBtn.dataset.url, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token|safe }}',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          const status = document.getElementById('fixed-status');
+          const icon = toggleBtn.querySelector('i');
+
+          if (data.fixed) {
+            icon.className = 'bi bi-pin-angle-fill';
+            toggleBtn.innerHTML = '<i class="bi bi-pin-angle-fill fs-5"></i>';
+            status.className = 'ms-2 text-success';
+          } else {
+            if (destroy) {
+              document.getElementById(toggleBtn.dataset.cardid).remove();
+              return;
+            }
+
+            icon.className = 'bi bi-pin-angle';
+            toggleBtn.innerHTML = '<i class="bi bi-pin-angle fs-5"></i>';
+            status.className = 'ms-2 text-muted';
+          }
+        });
+    }
+  </script>
+
+</body>
+
+</html>

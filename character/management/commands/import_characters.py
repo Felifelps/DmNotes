@@ -1,0 +1,60 @@
+import json
+
+from django.core.management import BaseCommand
+
+from character.models import Character
+from campaign.models import Campaign
+
+
+class Command(BaseCommand):
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            'file_name',
+            type=str,
+            help='Nome do arquivo CSV com atores'
+        )
+
+        parser.add_argument(
+            'delete_all',
+            type=bool,
+            help='Deletar todos os objetos antes de importar'
+        )
+
+    def handle(self, *args,**options):
+        file_name = options['file_name']
+
+        if options['delete_all']:
+            Character.objects.all().delete()
+            self.stdout.write(self.style.SUCCESS('Todos os objetos foram deletados.'))
+
+        if not file_name.endswith('.json'):
+            self.stdout.write(self.style.ERROR('O arquivo deve ser um JSON.'))
+            return
+
+        with open(file_name, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+
+        for character in data:
+            character.pop('id', None)
+            character.pop('class_name', None)
+            character.pop('race', None)
+            character.pop('status', None)
+            character.pop('image_path', None)
+            character['campaign'] = Campaign.objects.get(
+                pk=character.get('campaign_id', 1)  # Default to campaign with ID 1 if not specified
+            )
+
+            try:
+                Character.objects.create(
+                    **character
+                )
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f"Erro ao importar personagem {character.get('name', 'desconhecido')}: {e}"))
+                continue
+
+            # Só pra printar bonito
+            self.stdout.write(self.style.NOTICE(character['name']))
+
+        # Só pra printar bonito
+        self.stdout.write(self.style.SUCCESS('Characters importados com sucesso!'))

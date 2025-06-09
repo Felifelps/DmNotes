@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+  <h2 class="mb-0">Campanhas disponíveis</h2>
+  <a href="{% url 'campaign_create' %}" class="btn btn-info shadow-sm">
+    <i class="bi bi-plus-lg me-1"></i> Nova Campanha
+  </a>
+</div>
+
+<div class="input-group my-3">
+  <span class="input-group-text"><i class="bi bi-search"></i></span>
+  <input id="searchInput" class="form-control" placeholder="Buscar Campanha" oninput="filterElements()">
+</div>
+
+{% if campaigns %}
+<div id="elements" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  {% for campaign in campaigns %}
+  <a id="{{ campaign }}" href="{% url 'campaign_detail' campaign.pk %}" class="col card-hover-scale">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="bi bi-bookmark-fill text-secondary me-2"></i>
+          {{ campaign.name }}
+        </h5>
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-secondary text-center" role="alert">
+  Nenhuma campanha disponível no momento.
+</div>
+{% endif %}
+{% endblock %}
