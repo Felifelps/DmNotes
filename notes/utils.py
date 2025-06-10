@@ -11,6 +11,8 @@ class NoteGenericViewMixin(CampaignGenericViewMixin):
     def get_queryset(self):
         return self.campaign.notes.all()
 
+
+class NoteCreateOrUpdateViewMixin(NoteGenericViewMixin):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         campaign = get_object_or_404(Campaign, pk=self.kwargs['campaign_pk'])

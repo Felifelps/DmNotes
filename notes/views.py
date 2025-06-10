@@ -5,7 +5,7 @@ from django.http import JsonResponse
 
 from notes.models import Note
 from notes.forms import NoteForm
-from notes.utils import NoteGenericViewMixin
+from notes.utils import NoteGenericViewMixin, NoteCreateOrUpdateViewMixin
 
 class NoteToggleFixedView(View):
 
@@ -28,12 +28,12 @@ class NoteDetailView(LoginRequiredMixin, NoteGenericViewMixin, DetailView):
     model = Note
     template_name = 'note_detail.html'
 
-class NoteCreateView(LoginRequiredMixin, NoteGenericViewMixin, CreateView):
+class NoteCreateView(LoginRequiredMixin, NoteCreateOrUpdateViewMixin, CreateView):
     model = Note
     form_class = NoteForm
     template_name = 'note_create.html'
 
-class NoteUpdateView(LoginRequiredMixin, NoteGenericViewMixin, UpdateView):
+class NoteUpdateView(LoginRequiredMixin, NoteCreateOrUpdateViewMixin, UpdateView):
     model = Note
     form_class = NoteForm
     template_name = 'note_update.html'

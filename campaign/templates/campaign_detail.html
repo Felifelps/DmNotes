@@ -2,36 +2,21 @@
 
 {% block content %}
 <div class="row justify-content-center">
-  <div class="">
+  <div>
     <div class="card shadow-sm mb-4">
       <div class="card-header bg-primary text-white">
-        <h4 class="mb-0"> Dados </h4>
+        <h4 class="mb-0">Dados</h4>
       </div>
       <div class="card-body">
-
-        <p><strong>Descrição:</strong> {% if campaign.description %}
-          {{ campaign.description }}
-          {% else %}
-          Descrição não definida.
-          {% endif %}
-        </p>
-
-        <p><strong>História: </strong> {% if campaign.history %}
-          {{ campaign.history }}
-          {% else %}
-          História não definida.
-          {% endif %}
-        </p>
-
+        <p><strong>Descrição:</strong> {{ campaign.description|default:"Descrição não definida." }}</p>
+        <p><strong>História:</strong> {{ campaign.history|default:"História não definida." }}</p>
       </div>
     </div>
   </div>
 </div>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-  <div>
-    <h2 class="d-inline align-middle mb-0">Notas</h2>
-  </div>
+  <h2 class="mb-0">Notas</h2>
   <a href="{% url 'note_create' campaign.pk %}" class="btn btn-info shadow-sm">
     <i class="bi bi-plus-lg me-1"></i> Nova Nota
   </a>
@@ -40,138 +25,67 @@
 <div class="input-group my-3">
   <span class="input-group-text"><i class="bi bi-search"></i></span>
   <input class="form-control" placeholder="Buscar Nota" oninput="filterElements(this.value)">
-
   <span class="input-group-text"><i class="bi bi-arrow-down"></i></span>
   <select class="form-control" onchange="filterElements(this.value)">
-    <option value=""> Todas as Tags </option>
+    <option value="">Todas as Tags</option>
     {% for tag in tags %}
-    <option value="{{ tag }}"> {{ tag }} </option>
+      <option value="{{ tag }}">{{ tag }}</option>
     {% endfor %}
   </select>
 </div>
 
 {% if fixeds or notes %}
 <div id="elements" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-  <p id="not-found" style="display: none;"> Nenhum resultado encontrado. </p>
-  
-  <!-- FIXEDS -->
+  <p id="not-found" style="display:none;">Nenhum resultado encontrado.</p>
+
   <div id="fixed-elements" class="w-100 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
     {% for fixed in fixeds %}
-    <a id="{{ fixed }}-{{ fixed.tag }}"
-      href="{% url 'note_detail' campaign.pk fixed.pk %}?back_to={{ request.get_full_path|urlencode }}"
-      class="col card-hover-scale">
-      <div class="card h-100 border-0 shadow-sm" data-tag="{{ fixed.tag|lower }}">
-        <button id="toggle-fixed-btn-{{ fixed.pk }}" onclick="toggleFixed(event)" class="btn btn-sm w-25"
-          data-url="{% url 'note_toggle_fixed' campaign.pk fixed.pk %}">
-          {% if fixed.fixed %}
-          <i class="bi bi-pin-angle-fill fs-5"></i>
-          {% else %}
-          <i class="bi bi-pin-angle fs-5"></i>
-          {% endif %}
-        </button>
-
-        {% if fixed.image %}
-        <img src="{{ fixed.image.url }}" alt="{{ fixed }}" class="card-img-top rounded-top"
-          style="max-height: 200px; object-fit: cover;">
-        {% else %}
-        <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
-          <span class="text-muted"><i class="bi bi-image me-2"></i>Sem imagem</span>
-        </div>
-        {% endif %}
-        <div class="card-body">
-          <h5 class="card-title">{{ fixed }}</h5>
-        </div>
-      </div>
-    </a>
+      {% include 'partials/note_card.html' with note=fixed %}
     {% endfor %}
   </div>
 
-  <!-- NOTES -->
   <div id="note-elements" class="w-100 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
     {% for note in notes %}
-    <a id="{{ note }}-{{ note.tag }}"
-      href="{% url 'note_detail' campaign.pk note.pk %}?back_to={{ request.get_full_path|urlencode }}"
-      class="col card-hover-scale">
-      <div class="card h-100 border-0 shadow-sm" data-tag="{{ note.tag|lower }}">
-        <button id="toggle-fixed-btn-{{ note.pk }}" onclick="toggleFixed(event)" class="btn btn-sm w-25"
-          data-url="{% url 'note_toggle_fixed' campaign.pk note.pk %}">
-          {% if note.fixed %}
-          <i class="bi bi-pin-angle-fill fs-5"></i>
-          {% else %}
-          <i class="bi bi-pin-angle fs-5"></i>
-          {% endif %}
-        </button>
-
-        {% if note.image %}
-        <img src="{{ note.image.url }}" alt="{{ note }}" class="card-img-top rounded-top"
-          style="max-height: 200px; object-fit: cover;">
-        {% else %}
-        <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
-          <span class="text-muted"><i class="bi bi-image me-2"></i>Sem imagem</span>
-        </div>
-        {% endif %}
-        <div class="card-body">
-          <h5 class="card-title">{{ note }}</h5>
-        </div>
-      </div>
-    </a>
+      {% include 'partials/note_card.html' with note=note %}
     {% endfor %}
   </div>
 </div>
 {% else %}
-<div class="alert alert-secondary text-center" role="alert">
-  Nenhuma Nota encontrada nesta campanha.
-</div>
+  <div class="alert alert-secondary text-center">Nenhuma Nota encontrada nesta campanha.</div>
 {% endif %}
-</div>
 
 <script>
-
   function organizeFixed() {
-    const fixedElements = document.getElementById('fixed-elements');
-    const noteElements = document.getElementById('note-elements');
-
-    const allCards = Array.from(fixedElements.children).concat(Array.from(noteElements.children));
+    const fixedEl = document.getElementById('fixed-elements');
+    const noteEl = document.getElementById('note-elements');
+    const allCards = [...fixedEl.children, ...noteEl.children];
 
     allCards.forEach(card => {
       const isFixed = card.querySelector('i').classList.contains('bi-pin-angle-fill');
-
-      if (isFixed && card.parentElement !== fixedElements) {
-        fixedElements.appendChild(card);
-      } else if (!isFixed && card.parentElement !== noteElements) {
-        noteElements.appendChild(card);
-      }
+      const parent = isFixed ? fixedEl : noteEl;
+      if (card.parentElement !== parent) parent.appendChild(card);
     });
   }
 
-
-  function toggleFixed(event, destroy = false) {
-    const toggleBtn = event.currentTarget;
-
+  async function toggleFixed(event) {
     event.preventDefault();
-
-    fetch(toggleBtn.dataset.url, {
+    const btn = event.currentTarget;
+    const res = await fetch(btn.dataset.url, {
       method: 'POST',
       headers: {
         'X-CSRFToken': '{{ csrf_token|safe }}',
         'X-Requested-With': 'XMLHttpRequest',
       },
-    })
-      .then(response => response.json())
-      .then(data => {
-        const status = document.getElementById('fixed-status');
-        const icon = toggleBtn.querySelector('i');
+    });
+    const data = await res.json();
 
-        if (data.fixed) {
-          icon.className = 'bi bi-pin-angle-fill';
-          toggleBtn.innerHTML = '<i class="bi bi-pin-angle-fill fs-5"></i>';
-        } else {
-          icon.className = 'bi bi-pin-angle';
-          toggleBtn.innerHTML = '<i class="bi bi-pin-angle fs-5"></i>';
-        }
-
-        organizeFixed();
-      });
+    const icon = btn.querySelector('i');
+    if (data.fixed) {
+      icon.className = 'bi bi-pin-angle-fill fs-5';
+    } else {
+      icon.className = 'bi bi-pin-angle fs-5';
+    }
+    organizeFixed();
   }
 </script>
 {% endblock %}

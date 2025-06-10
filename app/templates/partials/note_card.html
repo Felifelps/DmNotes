@@ -1,0 +1,26 @@
+<a id="{{ note }}-{{ note.tag }}" href="{% url 'note_detail' note.campaign.pk note.pk %}?back_to={{ request.get_full_path|urlencode }}" class="col card-hover-scale">
+  <div class="card h-100 border-0 shadow-sm" data-tag="{{ note.tag|lower }}">
+    <button id="toggle-fixed-btn-{{ note.pk }}" onclick="toggleFixed(event)" class="btn btn-sm w-25" data-url="{% url 'note_toggle_fixed' note.campaign.pk note.pk %}">
+      {% if note.fixed %}
+        <i class="bi bi-pin-angle-fill fs-5"></i>
+      {% else %}
+        <i class="bi bi-pin-angle fs-5"></i>
+      {% endif %}
+    </button>
+
+    {% if note.image %}
+      <img src="{{ note.image.url }}" alt="{{ note }}" class="card-img-top rounded-top" style="max-height: 200px; object-fit: cover;">
+    {% else %}
+      <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
+        <span class="text-muted"><i class="bi bi-image me-2"></i>Sem imagem</span>
+      </div>
+    {% endif %}
+
+    <div class="card-body">
+      <h5 class="card-title">{{ note }}</h5>
+      {% if note.tag %}
+        <h6 class="card-subtitle text-muted">{{ note.tag.name }}</h6>
+      {% endif %}
+    </div>
+  </div>
+</a>
