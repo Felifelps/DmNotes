@@ -6,12 +6,7 @@ from campaign.models import Campaign
 from campaign.forms import CampaignForm
 from campaign.utils import CampaignDetailMixin
 
-from character.models import Character
-from dungeon.models import Dungeon
-from event.models import Event
-from item.models import Item
-from place.models import Place
-from sheet.models import Sheet
+from notes.models import Note
 
 
 class CampaignListView(LoginRequiredMixin, ListView):
@@ -22,6 +17,7 @@ class CampaignListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Campaign.objects.filter(user=self.request.user).order_by('-id')
 
+
 class CampaignDetailView(LoginRequiredMixin, CampaignDetailMixin, DetailView):
     model = Campaign
     template_name = 'campaign_detail.html'
@@ -30,20 +26,9 @@ class CampaignDetailView(LoginRequiredMixin, CampaignDetailMixin, DetailView):
         context = super().get_context_data(**kwargs)
         campaign = self.get_object()
 
-        context['fixeds'] = [
-            (Character.objects.filter(campaign=campaign, fixed=True),
-             'Personagem', 'character_detail', 'character_toggle_fixed'),
-            (Dungeon.objects.filter(campaign=campaign, fixed=True),
-             'Masmorra', 'dungeon_detail', 'dungeon_toggle_fixed'),
-            (Event.objects.filter(campaign=campaign, fixed=True),
-             'Evento', 'event_detail', 'event_toggle_fixed'),
-            (Item.objects.filter(campaign=campaign, fixed=True),
-             'Item', 'item_detail', 'item_toggle_fixed'),
-            (Place.objects.filter(campaign=campaign, fixed=True),
-             'Lugar', 'place_detail', 'place_toggle_fixed'),
-            (Sheet.objects.filter(campaign=campaign, fixed=True),
-             'Ficha', 'sheet_detail', 'sheet_toggle_fixed'),
-        ]
+        context['fixeds'] = Note.objects.filter(campaign=campaign, fixed=True)
+        context['notes'] = Note.objects.filter(campaign=campaign, fixed=False)
+        context['tags'] = self.campaign.tags.all()
 
         return context
 
@@ -52,7 +37,7 @@ class CampaignCreateView(LoginRequiredMixin, CreateView):
     model = Campaign
     form_class = CampaignForm
     template_name = 'campaign_create.html'
-    
+
     def get_success_url(self):
         return reverse('campaign_detail', args=[self.object.pk])
 
@@ -66,7 +51,7 @@ class CampaignUpdateView(LoginRequiredMixin, CampaignDetailMixin, UpdateView):
     model = Campaign
     form_class = CampaignForm
     template_name = 'campaign_update.html'
-    
+
     def get_success_url(self):
         return reverse('campaign_detail', args=[self.object.pk])
 

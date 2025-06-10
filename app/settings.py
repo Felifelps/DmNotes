@@ -49,13 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'dungeon',
-    'item',
-    'place',
-    'event',
+    'notes',
+    'tags',
     'campaign',
-    'character',
-    'sheet',
 ]
 
 MIDDLEWARE = [
