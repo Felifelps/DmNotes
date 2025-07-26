@@ -41,7 +41,7 @@ LOGOUT_REDIRECT_URL = '/login/'
 # Application definition
 
 INSTALLED_APPS = [
-    'storages',
+    #'storages',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -140,22 +140,23 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-    },
-    "default": {
-        "BACKEND": "app.storages.MediaStorage",
-        "OPTIONS": {
-            "access_key": config("SUPABASE_S3_ACCESS_KEY_ID"),
-            "secret_key": config("SUPABASE_S3_SECRET_ACCESS_KEY"),
-            "bucket_name": config("SUPABASE_S3_BUCKET_NAME"),
-            "region_name": config("SUPABASE_S3_REGION_NAME"),
-            "endpoint_url": config("SUPABASE_S3_ENDPOINT_URL"),
-            "addressing_style": "path",
+if config('STORAGES', default='0') == '1':
+    STORAGES = {
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
         },
-    },
-}
+        "default": {
+            "BACKEND": "app.storages.MediaStorage",
+            "OPTIONS": {
+                "access_key": config("SUPABASE_S3_ACCESS_KEY_ID"),
+                "secret_key": config("SUPABASE_S3_SECRET_ACCESS_KEY"),
+                "bucket_name": config("SUPABASE_S3_BUCKET_NAME"),
+                "region_name": config("SUPABASE_S3_REGION_NAME"),
+                "endpoint_url": config("SUPABASE_S3_ENDPOINT_URL"),
+                "addressing_style": "path",
+            },
+        },
+    }
 
 JAZZMIN_UI_TWEAKS = {
     "navbar_small_text": False,
