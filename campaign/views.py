@@ -7,6 +7,7 @@ from campaign.forms import CampaignForm
 from campaign.utils import CampaignDetailMixin
 
 from notes.models import Note
+from notes.forms import NoteForm
 
 
 class CampaignListView(LoginRequiredMixin, ListView):
@@ -29,6 +30,7 @@ class CampaignDetailView(LoginRequiredMixin, CampaignDetailMixin, DetailView):
         context['fixeds'] = Note.objects.filter(campaign=campaign, fixed=True)
         context['notes'] = Note.objects.filter(campaign=campaign, fixed=False)
         context['tags'] = self.campaign.tags.all()
+        context['note_form'] = NoteForm(campaign=campaign)
 
         return context
 

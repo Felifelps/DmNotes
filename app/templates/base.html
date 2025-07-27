@@ -5,6 +5,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="csrf-token" content="{{ csrf_token }}" />
+
   <title>{% block title %}DmNotes{% endblock %}</title>
 
   <!-- Bootstrap 5 CSS -->
@@ -21,33 +23,12 @@
     href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,500&family=Poppins:ital,wght@1,500&family=Playfair+Display:ital@1&display=swap"
     rel="stylesheet">
 
+  <script src="{% static 'js/cardList.js' %}"> </script>
+  <script src="{% static 'js/modal.js' %}"></script>
+  <script src="{% static 'js/updateNote.js' %}"> </script>
+  
 
   {% block head %} {% endblock %}
-
-  <style>
-    .card-hover-scale {
-      transition: transform 0.2s ease;
-      text-decoration: none;
-      ;
-    }
-
-    .card-hover-scale:hover {
-      transform: scale(1.03);
-      z-index: 1;
-      /* Garante que o hover fique sobre os outros cards */
-    }
-
-
-    .navbar-brand {
-      font-weight: bold;
-      font-size: 1.3rem;
-    }
-
-    footer {
-      font-size: 0.9rem;
-      background-color: #1c1c1c;
-    }
-  </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -104,7 +85,8 @@
             <a class="nav-link" href="{% url 'tag_list' campaign.pk %}">Tags</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'campaign_update' campaign.pk %}"><i class="bi bi-pencil-square"></i> Editar</a>
+            <a class="nav-link" href="{% url 'campaign_update' campaign.pk %}"><i class="bi bi-pencil-square"></i>
+              Editar Campanha </a>
           </li>
         </ul>
       </div>
@@ -128,96 +110,13 @@
     &copy; {{ now|default:2025 }} <strong>Felipe Santos</strong>. Todos os direitos reservados.
   </footer>
 
-  <!-- Modal para imagem -->
-  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content bg-dark text-white">
-        <div class="modal-header border-0">
-          <h5 class="modal-title" id="imageModalLabel"></h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <div class="modal-body text-center">
-          <img id="modalImage" src="" alt="" class="img-fluid rounded">
-        </div>
-      </div>
-    </div>
-  </div>
+  {% include 'partials/note_modal.html' %}
 
   {% block scripts %} {% endblock %}
 
   <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
-    function openImageModal(url, name) {
-      const modalImg = document.getElementById('modalImage');
-      const modalTitle = document.getElementById('imageModalLabel');
-      modalImg.src = url;
-      modalImg.alt = name;
-      modalTitle.textContent = name;
-    }
-
-    function filterElements(search) {
-      search = search.toLowerCase().trim();
-
-      const elements_list = document.querySelectorAll('#elements a');
-
-      let visible = elements_list.length;
-
-      elements_list.forEach(element => {
-        if (element.id.toLowerCase().includes(search)) {
-          element.style.display = 'block';
-        } else {
-          element.style.display = 'none';
-          visible--;
-        }
-      })
-
-      const elements = document.getElementById('elements');
-      const not_found = document.getElementById('not-found');
-
-      if (!visible) {
-        not_found.style.display = 'block';
-      } else {
-        not_found.style.display = 'none';
-      }
-
-    }
-
-    function organizeFixed() {
-    const fixedEl = document.getElementById('fixed-elements');
-    const noteEl = document.getElementById('note-elements');
-    const allCards = [...fixedEl.children, ...noteEl.children];
-
-    allCards.forEach(card => {
-      const isFixed = card.querySelector('i').classList.contains('bi-pin-angle-fill');
-      const parent = isFixed ? fixedEl : noteEl;
-      if (card.parentElement !== parent) parent.appendChild(card);
-    });
-  }
-
-  async function toggleFixed(event) {
-    event.preventDefault();
-    const btn = event.currentTarget;
-    const res = await fetch(btn.dataset.url, {
-      method: 'POST',
-      headers: {
-        'X-CSRFToken': '{{ csrf_token|safe }}',
-        'X-Requested-With': 'XMLHttpRequest',
-      },
-    });
-    const data = await res.json();
-
-    const icon = btn.querySelector('i');
-    if (data.fixed) {
-      icon.className = 'bi bi-pin-angle-fill fs-5';
-    } else {
-      icon.className = 'bi bi-pin-angle fs-5';
-    }
-    organizeFixed();
-  }
-
-  </script>
 
 </body>
 

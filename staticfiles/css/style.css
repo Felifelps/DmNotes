@@ -1,0 +1,22 @@
+.card-hover-scale {
+    transition: transform 0.2s ease;
+    text-decoration: none;
+    ;
+}
+
+.card-hover-scale:hover {
+    transform: scale(1.03);
+    z-index: 1;
+    /* Garante que o hover fique sobre os outros cards */
+}
+
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+footer {
+    font-size: 0.9rem;
+    background-color: #1c1c1c;
+}
