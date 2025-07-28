@@ -1,19 +1,23 @@
-function filterElements(search) {
+function filterElements(search, by='note') {
     const query = search.toLowerCase().trim();
-    const elementsList = document.querySelectorAll('#elements div');
+    const elementsList = document.querySelectorAll('div[id^="noteCard-"]');
     const notFound = document.getElementById('not-found');
 
     let anyVisible = false;
 
     elementsList.forEach(element => {
-        const isMatch = element.id.toLowerCase().includes(query);
-        element.style.display = isMatch ? 'flex' : 'none';
+        const elementIdentifier = by === 'note' ? element.dataset.noteName : element.dataset.noteTag;
+        if (!elementIdentifier) return;
+
+        const isMatch = elementIdentifier.toLowerCase().includes(query);
+
+        element.classList.toggle('d-none', !isMatch);
+
         if (isMatch) anyVisible = true;
     });
 
-    notFound.style.display = anyVisible ? 'none' : 'flex';
+    notFound.style.display = anyVisible ? 'none' : 'block';
 }
-
 
 function getCSRFToken() {
     return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -30,7 +34,7 @@ async function toggleFixed(event) {
             'X-Requested-With': 'XMLHttpRequest',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({}), // corpo vazio mas envia algo
+        body: JSON.stringify({}),
     });
 
     if (!res.ok) {

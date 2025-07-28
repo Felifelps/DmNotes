@@ -24,7 +24,7 @@ class NoteForm(forms.ModelForm):
                 attrs={'class': 'form-control'}
             ),
             'description': forms.Textarea(
-                attrs={'class': 'form-control', 'rows': 3}
+                attrs={'class': 'form-control', 'rows': 10}
             ),
         }
 

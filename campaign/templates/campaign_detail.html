@@ -8,8 +8,8 @@
         <h4 class="mb-0">Dados</h4>
       </div>
       <div class="card-body">
-        <p><strong>Descrição:</strong> {{ campaign.description|default:"Descrição não definida." }}</p>
-        <p><strong>História:</strong> {{ campaign.history|default:"História não definida." }}</p>
+        <p><strong>Descrição:</strong> {{ campaign.description|truncatechars:100|default:"Descrição não definida." }}</p>
+        <p><strong>História:</strong> {{ campaign.history|truncatechars:100|default:"História não definida." }}</p>
       </div>
     </div>
   </div>
@@ -24,9 +24,9 @@
 
 <div class="input-group my-3">
   <span class="input-group-text"><i class="bi bi-search"></i></span>
-  <input class="form-control" placeholder="Buscar Nota" oninput="filterElements(this.value)">
+  <input class="form-control" placeholder="Buscar Nota" oninput="filterElements(this.value, 'note')">
   <span class="input-group-text"><i class="bi bi-arrow-down"></i></span>
-  <select class="form-control" onchange="filterElements(this.value)">
+  <select class="form-control" onchange="filterElements(this.value, 'tag')">
     <option value="">Todas as Tags</option>
     {% for tag in tags %}
       <option value="{{ tag }}">{{ tag }}</option>
@@ -36,7 +36,10 @@
 
 {% if fixeds or notes %}
 <div id="elements" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 d-flex">
-  <p id="not-found" style="display:none;">Nenhum resultado encontrado.</p>
+
+  <div id="not-found" style="display:none;" class="w-100 alert alert-secondary text-center">
+    Nenhum resultado encontrado.
+  </div>
 
   <div id="fixed-elements" class="w-100 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
     {% for fixed in fixeds %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center mt-5">
+  <h1>404 - Página não encontrada</h1>
+  <p>A página que você tentou acessar não existe.</p>
+  <a href="{% url 'campaign_list' %}" class="btn btn-primary mt-3">Voltar para o início</a>
+</div>
+{% endblock %}
