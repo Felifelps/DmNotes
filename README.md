@@ -1,9 +1,9 @@
-# DMNotes
+# ![Logo](./static/img/icon.png) DMNotes
 
 **DMNotes** é um webapp Django voltado para a **organização de notas de mestres de RPG**.  
 Ele permite gerenciar campanhas, notas, tags e imagens em uma interface amigável e responsiva.
 
-## 📦 Funcionalidades
+## Funcionalidades
 
 - Autenticação de usuários (login, cadastro e logout)
 - Criação e gerenciamento de **campanhas**
@@ -12,7 +12,7 @@ Ele permite gerenciar campanhas, notas, tags e imagens em uma interface amigáve
 - Suporte a **imagens**
 - Interface limpa e intuitiva
 
-## 🚀 Rotas Principais
+## Rotas Principais
 
 | Caminho | Nome | Descrição |
 |--------|------|-----------|
@@ -27,44 +27,33 @@ Ele permite gerenciar campanhas, notas, tags e imagens em uma interface amigáve
 | `/signup/` | `signup` | Cadastro de usuário |
 | `/logout/` | `logout` | Logout do sistema |
 
-## ⚙️ Como rodar
+## Como rodar
+
+Para rodar esse projeto, basta ter o Git e o Python 3.10+ instalados.
 
 1. Clone o repositório:
+
 ```bash
 git clone https://github.com/Felifelps/DmNotes.git
 cd dmnotes
-````
-
-2. Crie um ambiente virtual e ative:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
 ```
 
-3. Instale as dependências:
+2. Rode o script de inicialização:
 
 ```bash
-pip install -r requirements.txt
+python setup.py
 ```
 
-4. Execute as migrações e inicie o servidor:
+3. Acesse: [http://localhost:8000](http://localhost:8000)
 
-```bash
-python manage.py migrate
-python manage.py runserver
-```
-
-5. Acesse: [http://localhost:8000](http://localhost:8000)
-
-## ✨ Tecnologias
+## Tecnologias
 
 * Python 3.10+
 * Django 4.x
 * HTML5 + CSS3 + Bootstrap + JS
 * SQLite (padrão)
 
-## 📜 Licença
+## Licença
 
 Este projeto está sob a licença MIT. Sinta-se livre para usar e contribuir.
 
