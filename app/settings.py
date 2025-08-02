@@ -90,27 +90,12 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-#if DEBUG:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-'''
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': config('DB_NAME'),
-            'USER': config('DB_USER'),
-            'HOST': config('DB_HOST'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'PORT': config('DB_PORT'),
-        }
-    }
-'''
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -130,7 +115,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -141,24 +125,6 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-if config('STORAGES', default='0') == '1':
-    STORAGES = {
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-        "default": {
-            "BACKEND": "app.storages.MediaStorage",
-            "OPTIONS": {
-                "access_key": config("SUPABASE_S3_ACCESS_KEY_ID"),
-                "secret_key": config("SUPABASE_S3_SECRET_ACCESS_KEY"),
-                "bucket_name": config("SUPABASE_S3_BUCKET_NAME"),
-                "region_name": config("SUPABASE_S3_REGION_NAME"),
-                "endpoint_url": config("SUPABASE_S3_ENDPOINT_URL"),
-                "addressing_style": "path",
-            },
-        },
-    }
 
 JAZZMIN_UI_TWEAKS = {
     "navbar_small_text": False,
